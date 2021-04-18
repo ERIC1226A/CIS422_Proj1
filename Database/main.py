@@ -3,7 +3,7 @@ Author: Connor Finch
 Created on: 4/16/2021
 Database: Takes in user input from a website and organizes it into a dictionary database
 
-TODO: Compile user input into a dictionary/database
+TODO: output data from database in order to be computed
 
 $env:FLASK_APP = "main.py"
 
@@ -64,6 +64,17 @@ def database():
     else:
         all_users = User.query.order_by(User.date_created)
         return render_template("database.html",title=title, users=all_users)
+
+
+@app.route("/delete/<int:id>")
+def delete(id):
+    user_delete = User.query.get_or_404(id)
+    try:
+        db.session.delete(user_delete)
+        db.session.commit()
+        return redirect("/database")
+    except:
+        return "FAILED TO DELETE USER FROM DATABASE"
 
 
 
